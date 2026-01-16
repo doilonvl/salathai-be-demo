@@ -12,6 +12,8 @@ import productCategoryRoutes from "./routes/productCategory.routes";
 import productRoutes from "./routes/product.routes";
 import reservationRequestRoutes from "./routes/reservationRequest.routes";
 import authRoutes from "./routes/auth.routes";
+import blogRoutes from "./routes/blog.routes";
+import publicBlogRoutes from "./routes/publicBlog.routes";
 
 const app = express();
 
@@ -53,6 +55,8 @@ app.use(`${API_BASE}/product-categories`, productCategoryRoutes);
 app.use(`${API_BASE}/products`, productRoutes);
 app.use(`${API_BASE}/reservation-requests`, reservationRequestRoutes);
 app.use(`${API_BASE}/auth`, authRoutes);
+app.use(`${API_BASE}/blogs`, blogRoutes);
+app.use(`${API_BASE}/public/blogs`, publicBlogRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route not found" });
