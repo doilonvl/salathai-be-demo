@@ -1,5 +1,10 @@
 import { transporter } from "../config/mailer";
 
+const mjKey = () => process.env.MAILJET_API_KEY || process.env.SMTP_USER;
+const mjSecret = () => process.env.MAILJET_API_SECRET || process.env.SMTP_PASS;
+const isMailjet = () =>
+  !!(mjKey() && mjSecret() && (process.env.SMTP_HOST || "").includes("mailjet"));
+
 function escapeHtml(s: string) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -129,14 +134,47 @@ ${payload.source ? `Source: ${payload.source}\n` : ""}
 ${payload.note ? `Note: ${payload.note}\n` : ""}
 `;
 
-  const mailOptions = {
+  if (isMailjet()) {
+    const key = mjKey()!;
+    const secret = mjSecret()!;
+    const res = await fetch("https://api.mailjet.com/v3.1/send", {
+      method: "POST",
+      headers: {
+        Authorization:
+          "Basic " + Buffer.from(`${key}:${secret}`).toString("base64"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        Messages: [
+          {
+            From: { Email: fromAddr, Name: fromName },
+            To: [{ Email: toAdmin }],
+            ...(payload.email ? { ReplyTo: { Email: payload.email } } : {}),
+            Subject: subject,
+            HTMLPart: html,
+            TextPart: text,
+          },
+        ],
+      }),
+    });
+    const data = (await res.json()) as any;
+    if (!res.ok)
+      throw new Error(
+        `Mailjet API error ${res.status}: ${JSON.stringify(data)}`
+      );
+    console.log(
+      "[MAIL] Mailjet API OK — status:",
+      data?.Messages?.[0]?.Status
+    );
+    return data;
+  }
+
+  return transporter.sendMail({
     from: `"${fromName}" <${fromAddr}>`,
     to: toAdmin,
     replyTo: payload.email || undefined,
     subject,
     html,
     text,
-  };
-
-  return transporter.sendMail(mailOptions);
+  });
 }
