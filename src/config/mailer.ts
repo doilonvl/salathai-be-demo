@@ -33,7 +33,6 @@ export const transporter = nodemailer.createTransport({
   requireTLS: !secure,
   connectionTimeout: 10000,
   socketTimeout: 10000,
-  pool: false,
 });
 
 export async function verifyMailer() {
