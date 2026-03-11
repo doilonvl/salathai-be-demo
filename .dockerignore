@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+*.log
+.git
+.gitignore
+coverage
+src/__tests__
+jest.config.js
+tsconfig.test.json
+README.md
+BACKEND_4_TANG_TEMPLATE.md
+MAILER_SETUP.md
+docker-compose.yml
+.github

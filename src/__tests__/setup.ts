@@ -1,0 +1,15 @@
+process.env.JWT_ACCESS_SECRET = "test-access-secret";
+process.env.JWT_REFRESH_SECRET = "test-refresh-secret";
+process.env.NODE_ENV = "test";
+process.env.API_BASE = "/api/v1";
+process.env.CORS_ORIGINS = "";
+process.env.COOKIE_DOMAIN = "localhost";
+process.env.COOKIE_SECURE = "false";
+process.env.URI_MONGODB = "mongodb://localhost:27017/salathai-test";
+process.env.SMTP_HOST = "localhost";
+process.env.SMTP_PORT = "587";
+process.env.SMTP_USER = "test";
+process.env.SMTP_PASS = "test";
+process.env.CLOUDINARY_CLOUD_NAME = "test";
+process.env.CLOUDINARY_API_KEY = "test";
+process.env.CLOUDINARY_API_SECRET = "test";
